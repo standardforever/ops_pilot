@@ -9,7 +9,7 @@ ENV PIP_DISABLE_PIP_VERSION_CHECK=1 \
     UV_COMPILE_BYTECODE=1 \
     UV_LINK_MODE=copy
 
-WORKDIR /build
+WORKDIR /app
 RUN python -m pip install "uv==${UV_VERSION}"
 
 COPY pyproject.toml uv.lock ./
@@ -33,7 +33,7 @@ RUN groupadd --gid 10001 opspilot \
     && useradd --uid 10001 --gid opspilot --no-create-home --shell /usr/sbin/nologin opspilot
 
 WORKDIR /app
-COPY --from=builder --chown=opspilot:opspilot /build/.venv /app/.venv
+COPY --from=builder --chown=opspilot:opspilot /app/.venv /app/.venv
 
 USER 10001:10001
 EXPOSE 8000
