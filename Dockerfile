@@ -3,7 +3,7 @@ ARG PYTHON_VERSION=3.12.11
 
 FROM python:${PYTHON_VERSION}-slim-bookworm AS builder
 
-ARG UV_VERSION=0.8.22
+ARG UV_VERSION=0.12.15
 ENV PIP_DISABLE_PIP_VERSION_CHECK=1 \
     PIP_NO_CACHE_DIR=1 \
     UV_COMPILE_BYTECODE=1 \
@@ -44,4 +44,3 @@ HEALTHCHECK --interval=10s --timeout=3s --start-period=5s --retries=3 \
 
 ENTRYPOINT ["uvicorn"]
 CMD ["ops_pilot.main:app", "--host", "0.0.0.0", "--port", "8000", "--no-access-log"]
-

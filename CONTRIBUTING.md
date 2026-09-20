@@ -85,6 +85,18 @@ Every pull request must:
 
 Do not merge with failing checks. Prefer a normal merge when preserving meaningful individual commits; use squash only when the branch history has no independent value.
 
+## CI dependency policy
+
+GitHub Actions are pinned to complete commit SHAs and include the corresponding release tag in a comment. When updating an action:
+
+1. Read the upstream release notes and identify breaking or permission changes.
+2. Verify the release tag and resolve it to its immutable commit SHA.
+3. Update both the SHA and version comment in the same pull request.
+4. Confirm workflow permissions remain read-only unless a documented step requires more.
+5. Run the local verification gate and require the updated workflow to pass before merge.
+
+Runtime and development dependencies are resolved in `uv.lock`; do not hand-edit that file.
+
 ## Review expectations
 
 Reviewers check correctness, scope, tests, security boundaries, observability, failure behavior, documentation, and maintainability. Resolve discussions with code or an explicit documented decision.
@@ -92,4 +104,3 @@ Reviewers check correctness, scope, tests, security boundaries, observability, f
 ## Reporting defects and vulnerabilities
 
 Use the issue templates for ordinary defects and feature requests. Do not report suspected vulnerabilities publicly. Follow [SECURITY.md](SECURITY.md) for private reporting.
-
