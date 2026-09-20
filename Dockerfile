@@ -3,13 +3,13 @@ ARG PYTHON_VERSION=3.12.11
 
 FROM python:${PYTHON_VERSION}-slim-bookworm AS builder
 
-ARG UV_VERSION=0.8.22
+ARG UV_VERSION=0.12.15
 ENV PIP_DISABLE_PIP_VERSION_CHECK=1 \
     PIP_NO_CACHE_DIR=1 \
     UV_COMPILE_BYTECODE=1 \
     UV_LINK_MODE=copy
 
-WORKDIR /build
+WORKDIR /app
 RUN python -m pip install "uv==${UV_VERSION}"
 
 COPY pyproject.toml uv.lock ./
@@ -33,7 +33,7 @@ RUN groupadd --gid 10001 opspilot \
     && useradd --uid 10001 --gid opspilot --no-create-home --shell /usr/sbin/nologin opspilot
 
 WORKDIR /app
-COPY --from=builder --chown=opspilot:opspilot /build/.venv /app/.venv
+COPY --from=builder --chown=opspilot:opspilot /app/.venv /app/.venv
 
 USER 10001:10001
 EXPOSE 8000
@@ -44,4 +44,3 @@ HEALTHCHECK --interval=10s --timeout=3s --start-period=5s --retries=3 \
 
 ENTRYPOINT ["uvicorn"]
 CMD ["ops_pilot.main:app", "--host", "0.0.0.0", "--port", "8000", "--no-access-log"]
-
