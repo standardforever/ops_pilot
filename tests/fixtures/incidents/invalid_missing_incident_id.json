@@ -1,0 +1,10 @@
+{
+  "schema_version": "1.0",
+  "occurred_at": "not-a-timestamp",
+  "source": "synthetic-monitor",
+  "severity": "urgent",
+  "signal_type": "high_cpu",
+  "resource": "service:checkout-demo",
+  "summary": "Invalid synthetic incident"
+}
+
