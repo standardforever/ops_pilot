@@ -58,7 +58,8 @@ logs: ## Follow structured container logs
 smoke: ## Verify a running service through its public health endpoints
 	./scripts/smoke.sh http://$(HOST):$(PORT)
 
-demo: smoke ## Run the currently available safe local demonstration
+demo: ## Exercise supported, unknown, and invalid incident behavior
+	./scripts/demo.py http://$(HOST):$(PORT)
 
 clean: ## Remove local generated verification output
 	rm -rf .coverage coverage.xml htmlcov .pytest_cache .mypy_cache .ruff_cache
