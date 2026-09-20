@@ -2,9 +2,6 @@
 set -eu
 
 base_url="${1:-http://127.0.0.1:8000}"
+script_directory=$(CDPATH='' cd -- "$(dirname -- "$0")" && pwd)
 
-curl --fail --silent --show-error "${base_url}/health/live" >/dev/null
-curl --fail --silent --show-error "${base_url}/health/ready" >/dev/null
-
-printf '%s\n' "OpsPilot smoke test passed: ${base_url}"
-
+exec python3 "${script_directory}/smoke.py" "${base_url}"

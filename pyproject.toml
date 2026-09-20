@@ -34,6 +34,7 @@ packages = ["src/ops_pilot"]
 [tool.pytest.ini_options]
 addopts = "--strict-config --strict-markers"
 testpaths = ["tests"]
+markers = ["smoke: requires an already running local service"]
 
 [tool.ruff]
 target-version = "py312"
@@ -51,3 +52,14 @@ packages = ["ops_pilot"]
 [tool.bandit]
 exclude_dirs = ["tests"]
 
+[tool.coverage.run]
+branch = true
+source = ["ops_pilot"]
+
+[tool.coverage.report]
+fail_under = 85
+show_missing = true
+skip_covered = false
+
+[tool.coverage.xml]
+output = "coverage.xml"
