@@ -1,0 +1,34 @@
+services:
+  ops-pilot:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: ops-pilot:local
+    environment:
+      OPSPILOT_ENVIRONMENT: production
+      OPSPILOT_LOG_LEVEL: INFO
+      OPSPILOT_DOCS_ENABLED: "true"
+    ports:
+      - "127.0.0.1:8000:8000"
+    init: true
+    read_only: true
+    tmpfs:
+      - /tmp:size=16m,mode=1777
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - >-
+          import urllib.request;
+          urllib.request.urlopen('http://127.0.0.1:8000/health/ready', timeout=2)
+      interval: 10s
+      timeout: 3s
+      retries: 3
+      start_period: 5s
+    stop_grace_period: 10s
+
