@@ -1,0 +1,12 @@
+{
+  "schema_version": "1.0",
+  "incident_id": "inc-demo-004",
+  "occurred_at": "2026-09-20T12:15:00Z",
+  "source": "synthetic-monitor",
+  "severity": "medium",
+  "signal_type": "unknown",
+  "resource": "service:unknown-demo",
+  "summary": "Synthetic signal is not classified",
+  "evidence": []
+}
+
