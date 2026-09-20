@@ -11,6 +11,7 @@ from ops_pilot.analysis import analyze_incident
 from ops_pilot.application import create_app
 from ops_pilot.config import Environment, Settings
 from ops_pilot.domain import Incident, SignalType
+from ops_pilot.observability import InMemoryAuditSink
 
 FIXTURE_DIRECTORY = Path(__file__).parent / "fixtures" / "incidents"
 
@@ -68,13 +69,17 @@ def test_unknown_signal_preserves_uncertainty_and_adds_safe_evidence() -> None:
 def test_api_returns_validated_triage_plan() -> None:
     incident_data = json.loads((FIXTURE_DIRECTORY / "high_cpu.json").read_text(encoding="utf-8"))
 
-    with TestClient(create_app(Settings(environment=Environment.TEST))) as client:
+    audit_sink = InMemoryAuditSink()
+    with TestClient(
+        create_app(Settings(environment=Environment.TEST), audit_sink=audit_sink)
+    ) as client:
         response = client.post("/v1/incidents/analyze", json=incident_data)
 
     assert response.status_code == 200
     body = response.json()
     assert body["incident_id"] == "inc-demo-001"
     assert body["recommendations"][0]["action"]["read_only"] is True
+    assert body["audit_event_id"] == audit_sink.events[0].event_id
 
 
 def test_api_returns_safe_documented_validation_error() -> None:
@@ -88,5 +93,6 @@ def test_api_returns_safe_documented_validation_error() -> None:
     assert response.status_code == 422
     body = response.json()
     assert body["error_code"] == "invalid_request"
+    assert body["correlation_id"] == response.headers["X-Correlation-ID"]
     assert "traceback" not in response.text.lower()
     assert "input" not in body
