@@ -1,0 +1,44 @@
+name: Engineering task
+description: Define bounded implementation, maintenance, testing, or documentation work
+title: "[Task]: "
+body:
+  - type: textarea
+    id: context
+    attributes:
+      label: Context and reason
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: Scope and deliverables
+      placeholder: |
+        - ...
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      placeholder: |
+        - [ ] ...
+    validations:
+      required: true
+  - type: textarea
+    id: validation
+    attributes:
+      label: Validation approach
+      description: State how reviewers can objectively verify completion.
+    validations:
+      required: true
+  - type: textarea
+    id: dependencies
+    attributes:
+      label: Dependencies and blockers
+  - type: textarea
+    id: risk
+    attributes:
+      label: Risk and rollback
+    validations:
+      required: true
+
