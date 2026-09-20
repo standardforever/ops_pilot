@@ -23,4 +23,5 @@ class ErrorResponse(BaseModel):
     schema_version: Literal["1.0"] = "1.0"
     error_code: str = Field(description="Stable machine-readable error code")
     message: str = Field(description="Safe summary for the caller")
+    correlation_id: str = Field(description="Identifier joining the response and request logs")
     details: tuple[ValidationProblem, ...] = ()
