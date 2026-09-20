@@ -3,10 +3,14 @@
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
+from fastapi.exceptions import RequestValidationError
+from fastapi.responses import JSONResponse
 
 from ops_pilot import __version__
+from ops_pilot.api.errors import ErrorResponse, ValidationProblem
 from ops_pilot.api.health import router as health_router
+from ops_pilot.api.incidents import router as incidents_router
 from ops_pilot.config import Settings
 
 
@@ -35,4 +39,25 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app.state.settings = resolved_settings
     app.state.ready = False
     app.include_router(health_router)
+    app.include_router(incidents_router)
+
+    @app.exception_handler(RequestValidationError)
+    async def request_validation_handler(
+        _request: Request, exception: RequestValidationError
+    ) -> JSONResponse:
+        details = tuple(
+            ValidationProblem(
+                location=tuple(error["loc"]),
+                message=error["msg"],
+                problem_type=error["type"],
+            )
+            for error in exception.errors()
+        )
+        payload = ErrorResponse(
+            error_code="invalid_request",
+            message="The request does not satisfy the incident contract.",
+            details=details,
+        )
+        return JSONResponse(status_code=422, content=payload.model_dump(mode="json"))
+
     return app

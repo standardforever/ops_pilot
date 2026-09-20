@@ -1,0 +1,21 @@
+{
+  "schema_version": "1.0",
+  "incident_id": "inc-demo-003",
+  "occurred_at": "2026-09-20T12:10:00Z",
+  "source": "synthetic-monitor",
+  "severity": "critical",
+  "signal_type": "failed_health_check",
+  "resource": "service:payments-demo",
+  "summary": "Synthetic readiness check failed",
+  "evidence": [
+    {
+      "evidence_id": "ev-health-001",
+      "kind": "event",
+      "name": "readiness_status",
+      "value": "failed",
+      "observed_at": "2026-09-20T12:09:30Z",
+      "source": "synthetic-monitor"
+    }
+  ]
+}
+
