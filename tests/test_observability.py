@@ -32,9 +32,9 @@ def test_invalid_correlation_id_is_replaced() -> None:
 
 def test_redaction_recurses_through_sensitive_fields() -> None:
     data = {
-        "authorization": "Bearer secret",
+        "authorization": "Bearer synthetic-value",  # pragma: allowlist secret
         "nested": {"api-key": "abc", "safe": "visible"},
-        "items": [{"password": "guess-me"}],
+        "items": [{"password": "synthetic-value"}],  # pragma: allowlist secret
     }
 
     assert redact(data) == {

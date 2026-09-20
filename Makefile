@@ -4,7 +4,7 @@ UV ?= uv
 HOST ?= 127.0.0.1
 PORT ?= 8000
 
-.PHONY: help bootstrap run format format-check lint typecheck test coverage security verify \
+.PHONY: help bootstrap run format format-check lint typecheck test coverage secrets security verify \
 	build up down logs smoke demo clean
 
 help: ## Show available project commands
@@ -34,11 +34,14 @@ test: ## Run the automated test suite
 coverage: ## Run tests with line coverage enforcement
 	$(UV) run pytest --cov=ops_pilot --cov-report=term-missing --cov-report=xml --cov-fail-under=85
 
+secrets: ## Scan tracked files against the reviewed secret baseline
+	git ls-files -z | xargs -0 $(UV) run detect-secrets-hook --baseline .secrets.baseline
+
 security: ## Run source and dependency security checks
 	$(UV) run bandit -c pyproject.toml -r src
 	$(UV) run pip-audit
 
-verify: format-check lint typecheck coverage security ## Run the complete local quality gate
+verify: format-check lint typecheck coverage security secrets ## Run the complete local quality gate
 
 build: ## Build the production-like local container image
 	docker build --tag ops-pilot:local .
