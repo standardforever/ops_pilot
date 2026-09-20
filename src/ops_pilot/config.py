@@ -28,5 +28,5 @@ class Settings(BaseSettings):
     environment: Environment = Environment.LOCAL
     log_level: str = Field(default="INFO", pattern=r"^(DEBUG|INFO|WARNING|ERROR|CRITICAL)$")
     docs_enabled: bool = True
-    host: str = Field(default="0.0.0.0", min_length=1, max_length=255)
+    host: str = Field(default="127.0.0.1", min_length=1, max_length=255)
     port: int = Field(default=8000, ge=1, le=65535)

@@ -32,7 +32,7 @@ test: ## Run the automated test suite
 	$(UV) run pytest -q
 
 coverage: ## Run tests with line coverage enforcement
-	$(UV) run pytest --cov=ops_pilot --cov-report=term-missing --cov-report=xml
+	$(UV) run pytest --cov=ops_pilot --cov-report=term-missing --cov-report=xml --cov-fail-under=85
 
 security: ## Run source and dependency security checks
 	$(UV) run bandit -c pyproject.toml -r src
@@ -59,4 +59,3 @@ demo: smoke ## Run the currently available safe local demonstration
 
 clean: ## Remove local generated verification output
 	rm -rf .coverage coverage.xml htmlcov .pytest_cache .mypy_cache .ruff_cache
-
