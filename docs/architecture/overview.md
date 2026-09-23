@@ -6,6 +6,12 @@ This document describes the target architecture for OpsPilot. The platform is be
 
 OpsPilot coordinates infrastructure incident analysis and operational response while maintaining separation between evidence collection, analysis, policy, approval, and execution.
 
+## Current architecture increments
+
+- [Initial local system context](system-context.md)
+- [Week 2 evidence-collection architecture](evidence-collection.md)
+- [ADR-0004: static asynchronous read-only collectors](adr/0004-read-only-collector-interface.md)
+
 ## Architectural principles
 
 - Analysis does not grant permission to execute.
@@ -84,6 +90,9 @@ It should pass references to credentials rather than receive unrestricted creden
 ### Evidence collectors
 
 Collectors retrieve operational context from one approved source each.
+
+The current collector boundary, registry, timeout, provenance, and extension rules
+are defined in the [evidence-collection architecture](evidence-collection.md).
 
 Potential sources include:
 
